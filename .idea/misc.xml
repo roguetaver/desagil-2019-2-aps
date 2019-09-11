@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="EntryPointsManager">
+    <pattern value="br.pro.hashi.ensino.desagil.aps.model.Gate" method="getInputSize" />
+    <pattern value="br.pro.hashi.ensino.desagil.aps.model.SignalReceiver" method="connect" />
+    <pattern value="br.pro.hashi.ensino.desagil.aps.model.Light" method="connect" />
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_12" default="true" project-jdk-name="12" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>
