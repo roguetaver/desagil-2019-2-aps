@@ -1,30 +1,29 @@
-// FONTE DAS IMAGENS: https://en.wikipedia.org/wiki/Logic_gate (domínio público)
 
 package br.pro.hashi.ensino.desagil.aps.view;
 
 import br.pro.hashi.ensino.desagil.aps.model.Gate;
+import br.pro.hashi.ensino.desagil.aps.model.Light;
 import br.pro.hashi.ensino.desagil.aps.model.Switch;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.URL;
 
-public class GateView extends FixedPanel implements ItemListener {
-    private static final int BORDER = 10;
-    private static final int SWITCH_SIZE = 18;
-    private static final int GATE_WIDTH = 90;
-    private static final int GATE_HEIGHT = 60;
-
+public class GateView extends FixedPanel implements ActionListener, MouseListener {
     private final Switch[] switches;
+    private final Image image;
+    private Light light;
     private final Gate gate;
     private final JCheckBox[] inputBoxes;
-    private final JCheckBox outputBox;
-    private final Image image;
+
+
 
     public GateView(Gate gate) {
-        super(BORDER + SWITCH_SIZE + GATE_WIDTH + SWITCH_SIZE + BORDER, GATE_HEIGHT);
+        super(250, 150);
 
         this.gate = gate;
 
@@ -33,6 +32,11 @@ public class GateView extends FixedPanel implements ItemListener {
         switches = new Switch[inputSize];
         inputBoxes = new JCheckBox[inputSize];
 
+        light = new Light();
+        light.connect(0,gate);
+        light.setR(255);
+
+
         for (int i = 0; i < inputSize; i++) {
             switches[i] = new Switch();
             inputBoxes[i] = new JCheckBox();
@@ -40,29 +44,29 @@ public class GateView extends FixedPanel implements ItemListener {
             gate.connect(i, switches[i]);
         }
 
-        outputBox = new JCheckBox();
+        JLabel inputLabel = new JLabel("Entrada");
 
-        int x, y, step;
+        add(inputLabel);
 
-        x = BORDER;
-        y = -(SWITCH_SIZE / 2);
-        step = (GATE_HEIGHT / (inputSize + 1));
-        for (JCheckBox inputBox : inputBoxes) {
-            y += step;
-            add(inputBox, x, y, SWITCH_SIZE, SWITCH_SIZE);
+        if (inputBoxes.length == 1){
+            add(inputBoxes[0],26,54,25,25);
+        }
+        else{
+            int y = 39;
+            for (JCheckBox inputBox : inputBoxes) {
+                add(inputBox,40,y,25,25);
+                y += 30;
+            }
         }
 
-        add(outputBox, BORDER + SWITCH_SIZE + GATE_WIDTH, (GATE_HEIGHT - SWITCH_SIZE) / 2, SWITCH_SIZE, SWITCH_SIZE);
+        for (JCheckBox inputBox : inputBoxes) {
+            inputBox.addActionListener(this);
+        }
 
         String name = gate.toString() + ".png";
         URL url = getClass().getClassLoader().getResource(name);
         image = getToolkit().getImage(url);
-
-        for (JCheckBox inputBox : inputBoxes) {
-            inputBox.addItemListener(this);
-        }
-
-        outputBox.setEnabled(false);
+        addMouseListener(this);
 
         update();
     }
@@ -76,21 +80,57 @@ public class GateView extends FixedPanel implements ItemListener {
             }
         }
 
-        boolean result = gate.read();
-
-        outputBox.setSelected(result);
+        repaint();
     }
 
     @Override
-    public void itemStateChanged(ItemEvent event) {
+    public void actionPerformed(ActionEvent event) {
         update();
     }
 
     @Override
+    public void mouseClicked(MouseEvent event) {
+
+        Color color;
+
+        if (Math.pow((event.getX() - 180),2) + Math.pow((event.getY() - 60),2) <= Math.pow(17,2)){
+
+            color = JColorChooser.showDialog(this, null, new Color(light.getR(), light.getG(), light.getB()));
+            if (color != null) {
+                light.setB(color.getBlue());
+                light.setG(color.getGreen());
+                light.setR(color.getRed());
+            }
+            repaint();
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent event) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent event) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent event) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent event) {
+    }
+
+    @Override
     public void paintComponent(Graphics g) {
+
         super.paintComponent(g);
 
-        g.drawImage(image, BORDER + SWITCH_SIZE, 0, GATE_WIDTH, GATE_HEIGHT, this);
+        Color color = new Color(light.getR(),light.getG(),light.getB());
+        g.setColor(color);
+
+        g.drawImage(image, 40, 30, 150, 75, this);
+        g.fillRoundRect(180,60,15,15,20,20);
 
         getToolkit().sync();
     }
