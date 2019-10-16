@@ -93,7 +93,7 @@ public class GateView extends FixedPanel implements ActionListener, MouseListene
 
         Color color;
 
-        if (Math.pow((event.getX() - 180),2) + Math.pow((event.getY() - 60),2) <= Math.pow(17,2)){
+        if (Math.pow((event.getX() - 200),2) + Math.pow((event.getY() - 70),2) <= Math.pow(17,2)){
 
             color = JColorChooser.showDialog(this, null, new Color(light.getR(), light.getG(), light.getB()));
             if (color != null) {
