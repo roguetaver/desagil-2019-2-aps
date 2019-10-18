@@ -24,7 +24,7 @@ public class GateView extends FixedPanel implements ItemListener {
     private final Image image;
 
     public GateView(Gate gate) {
-        super(BORDER + SWITCH_SIZE + GATE_WIDTH + SWITCH_SIZE + BORDER, GATE_HEIGHT);
+        super(GATE_HEIGHT);
 
         this.gate = gate;
 
