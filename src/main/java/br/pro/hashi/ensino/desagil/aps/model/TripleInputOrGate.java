@@ -29,7 +29,7 @@ public class TripleInputOrGate extends Gate {
 
         nandfinal = new NandGate();
         nandfinal.connect(0, nandTop3);
-        nandfinal.connect(1,nandBottom);
+        nandfinal.connect(1, nandBottom);
 
     }
 
@@ -55,8 +55,8 @@ public class TripleInputOrGate extends Gate {
                 nandMid.connect(1, emitter);
                 break;
             case 2:
-                nandBottom.connect(0,emitter);
-                nandBottom.connect(1,emitter);
+                nandBottom.connect(0, emitter);
+                nandBottom.connect(1, emitter);
                 break;
             default:
                 throw new IndexOutOfBoundsException(inputPin);
